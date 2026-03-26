@@ -6,55 +6,94 @@
   <title>Escalade Coach</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
-    body { font-family: Arial, sans-serif; }
+    body {
+      font-family: Arial, sans-serif;
+      background:
+        radial-gradient(circle at top left, #d1fae5 0%, transparent 25%),
+        radial-gradient(circle at top right, #bfdbfe 0%, transparent 25%),
+        linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
+    }
+
     .screen { display: none; }
     .screen.active { display: flex; }
+
+    .card-glow {
+      box-shadow:
+        0 10px 30px rgba(15, 23, 42, 0.08),
+        0 1px 0 rgba(255,255,255,0.8) inset;
+    }
+
+    .soft-button {
+      transition: transform 0.15s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+    }
+
+    .soft-button:active {
+      transform: scale(0.97);
+    }
+
+    .count-pop {
+      animation: pop 0.18s ease;
+    }
+
+    @keyframes pop {
+      0% { transform: scale(0.9); }
+      100% { transform: scale(1); }
+    }
   </style>
 </head>
-<body class="bg-gradient-to-b from-emerald-50 to-slate-100 text-slate-900">
+<body class="text-slate-900 min-h-screen">
 
-  <!-- Barre de progression -->
-  <div class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur border-b border-slate-200">
-    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
-      <div>
-        <h1 class="text-xl md:text-2xl font-black text-emerald-700">Escalade Coach</h1>
-        <p class="text-xs md:text-sm text-slate-500">Utiliser davantage les pieds que les bras</p>
+  <!-- HEADER -->
+  <div class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-xl border-b border-slate-200">
+    <div class="max-w-5xl mx-auto px-4 py-4">
+      <div class="flex items-center justify-between gap-4">
+        <div>
+          <h1 class="text-2xl md:text-3xl font-black text-emerald-700">Escalade Coach</h1>
+          <p class="text-sm md:text-base text-slate-500">Monter avec plus de pieds que de bras</p>
+        </div>
+        <div class="hidden md:flex items-center gap-2">
+          <div id="dot1" class="w-3 h-3 rounded-full bg-emerald-600"></div>
+          <div id="dot2" class="w-3 h-3 rounded-full bg-slate-300"></div>
+          <div id="dot3" class="w-3 h-3 rounded-full bg-slate-300"></div>
+          <div id="dot4" class="w-3 h-3 rounded-full bg-slate-300"></div>
+        </div>
       </div>
-      <div class="flex items-center gap-2">
-        <div id="dot1" class="w-3 h-3 rounded-full bg-emerald-600"></div>
-        <div id="dot2" class="w-3 h-3 rounded-full bg-slate-300"></div>
-        <div id="dot3" class="w-3 h-3 rounded-full bg-slate-300"></div>
-        <div id="dot4" class="w-3 h-3 rounded-full bg-slate-300"></div>
+
+      <div class="mt-4 h-3 bg-slate-200 rounded-full overflow-hidden">
+        <div id="progressBar" class="h-full bg-gradient-to-r from-emerald-500 to-teal-400 rounded-full transition-all duration-300" style="width: 25%;"></div>
       </div>
     </div>
   </div>
 
   <!-- ECRAN 1 -->
-  <section id="screen1" class="screen active min-h-screen pt-24 px-4 items-center justify-center">
-    <div class="w-full max-w-3xl bg-white rounded-3xl shadow-xl border border-slate-200 p-6 md:p-10">
+  <section id="screen1" class="screen active min-h-screen pt-32 px-4 items-center justify-center">
+    <div class="w-full max-w-3xl bg-white/95 rounded-[2rem] p-6 md:p-10 border border-white/80 card-glow">
       <div class="text-center mb-8">
-        <p class="text-sm font-bold uppercase tracking-widest text-emerald-600">Étape 1</p>
-        <h2 class="text-3xl md:text-4xl font-black mt-2">Préparer le passage</h2>
-        <p class="text-slate-500 mt-3">Renseigne les informations avant de commencer l’observation.</p>
+        <div class="text-5xl mb-3">🧗</div>
+        <p class="text-sm font-bold uppercase tracking-[0.25em] text-emerald-600">Étape 1</p>
+        <h2 class="text-3xl md:text-5xl font-black mt-2">Préparer le passage</h2>
+        <p class="text-slate-500 mt-4 text-base md:text-lg">
+          Renseigne les informations du grimpeur et de l’observateur avant de commencer.
+        </p>
       </div>
 
       <div class="space-y-5">
         <div>
           <label class="block text-sm font-bold mb-2">Nom du grimpeur</label>
           <input id="climberName" type="text" placeholder="Ex : Lina Martin"
-            class="w-full rounded-2xl border border-slate-300 px-4 py-4 text-lg focus:outline-none focus:ring-4 focus:ring-emerald-200" />
+            class="w-full rounded-2xl border border-slate-300 px-4 py-4 text-lg bg-slate-50 focus:bg-white focus:outline-none focus:ring-4 focus:ring-emerald-200" />
         </div>
 
         <div>
           <label class="block text-sm font-bold mb-2">Nom de l’observateur</label>
           <input id="observerName" type="text" placeholder="Ex : Adam Bernard"
-            class="w-full rounded-2xl border border-slate-300 px-4 py-4 text-lg focus:outline-none focus:ring-4 focus:ring-emerald-200" />
+            class="w-full rounded-2xl border border-slate-300 px-4 py-4 text-lg bg-slate-50 focus:bg-white focus:outline-none focus:ring-4 focus:ring-emerald-200" />
         </div>
 
         <div>
           <label class="block text-sm font-bold mb-2">Voie choisie</label>
           <select id="routeLevel"
-            class="w-full rounded-2xl border border-slate-300 px-4 py-4 text-lg focus:outline-none focus:ring-4 focus:ring-emerald-200">
+            class="w-full rounded-2xl border border-slate-300 px-4 py-4 text-lg bg-slate-50 focus:bg-white focus:outline-none focus:ring-4 focus:ring-emerald-200">
             <option value="">-- Sélectionner une voie --</option>
             <option value="4a">4a</option>
             <option value="4b">4b</option>
@@ -66,88 +105,96 @@
         </div>
       </div>
 
-      <div id="setupError" class="mt-5 text-red-600 font-semibold hidden">
-        Merci de remplir toutes les informations.
+      <div id="setupError" class="mt-5 hidden rounded-2xl bg-red-50 border border-red-200 text-red-700 px-4 py-3 font-semibold">
+        Merci de remplir toutes les informations avant de continuer.
       </div>
 
       <button onclick="goToAuthorization()"
-        class="mt-8 w-full bg-emerald-600 hover:bg-emerald-700 text-white py-4 rounded-2xl text-lg md:text-xl font-black shadow-lg transition">
+        class="soft-button mt-8 w-full bg-gradient-to-r from-emerald-600 to-teal-500 hover:opacity-95 text-white py-4 rounded-2xl text-lg md:text-xl font-black shadow-lg">
         Continuer
       </button>
     </div>
   </section>
 
   <!-- ECRAN 2 -->
-  <section id="screen2" class="screen min-h-screen pt-24 px-4 items-center justify-center">
-    <div class="w-full max-w-3xl bg-white rounded-3xl shadow-xl border border-slate-200 p-6 md:p-10 text-center">
-      <p class="text-sm font-bold uppercase tracking-widest text-red-500">Étape 2</p>
-      <h2 class="text-3xl md:text-4xl font-black mt-2">Attendre le professeur</h2>
-      <p class="text-slate-600 mt-4 text-lg">
-        Le grimpeur ne doit pas commencer avant l’autorisation du professeur.
+  <section id="screen2" class="screen min-h-screen pt-32 px-4 items-center justify-center">
+    <div class="w-full max-w-3xl bg-white/95 rounded-[2rem] p-6 md:p-10 border border-white/80 card-glow text-center">
+      <div class="text-5xl mb-3">⛔</div>
+      <p class="text-sm font-bold uppercase tracking-[0.25em] text-red-500">Étape 2</p>
+      <h2 class="text-3xl md:text-5xl font-black mt-2">Attendre le professeur</h2>
+      <p class="text-slate-500 mt-4 text-base md:text-lg">
+        Le départ ne peut être lancé qu’après l’autorisation du professeur.
       </p>
 
-      <div class="mt-8 bg-amber-50 border border-amber-300 rounded-2xl p-5 text-amber-800">
-        <p class="font-bold text-lg">Consigne de sécurité</p>
-        <p class="mt-2">
-          Grimpeur : <span id="recapClimber" class="font-bold"></span><br>
-          Observateur : <span id="recapObserver" class="font-bold"></span><br>
-          Voie : <span id="recapRoute" class="font-bold"></span>
+      <div class="mt-8 rounded-[1.5rem] bg-amber-50 border border-amber-300 p-6 text-left">
+        <p class="font-black text-amber-800 text-lg">Consigne de sécurité</p>
+        <div class="mt-4 space-y-2 text-amber-900">
+          <p><strong>Grimpeur :</strong> <span id="recapClimber"></span></p>
+          <p><strong>Observateur :</strong> <span id="recapObserver"></span></p>
+          <p><strong>Voie :</strong> <span id="recapRoute"></span></p>
+        </div>
+        <p class="mt-4 text-lg font-bold text-amber-700">
+          Attendre le professeur avant de commencer.
         </p>
-        <p class="mt-3 font-semibold">Attendre le professeur avant de lancer le passage.</p>
       </div>
 
       <button onclick="authorizeStart()"
-        class="mt-8 w-full bg-red-600 hover:bg-red-700 text-white py-5 rounded-2xl text-xl md:text-2xl font-black shadow-lg transition">
+        class="soft-button mt-8 w-full bg-red-600 hover:bg-red-700 text-white py-5 rounded-2xl text-xl md:text-2xl font-black shadow-lg">
         Autoriser le départ
       </button>
 
       <button onclick="goToScreen(1)"
-        class="mt-4 w-full bg-slate-200 hover:bg-slate-300 text-slate-800 py-3 rounded-2xl text-base font-bold transition">
+        class="soft-button mt-4 w-full bg-slate-200 hover:bg-slate-300 text-slate-800 py-3 rounded-2xl text-base font-bold">
         Retour
       </button>
     </div>
   </section>
 
   <!-- ECRAN 3 -->
-  <section id="screen3" class="screen min-h-screen pt-24 px-4 items-center justify-center">
-    <div class="w-full max-w-4xl bg-white rounded-3xl shadow-xl border border-slate-200 p-6 md:p-10">
+  <section id="screen3" class="screen min-h-screen pt-32 px-4 items-center justify-center">
+    <div class="w-full max-w-4xl bg-white/95 rounded-[2rem] p-6 md:p-10 border border-white/80 card-glow">
       <div class="text-center mb-8">
-        <p class="text-sm font-bold uppercase tracking-widest text-emerald-600">Étape 3</p>
-        <h2 class="text-3xl md:text-4xl font-black mt-2">Compter les mouvements</h2>
-        <p class="text-slate-500 mt-3">
+        <div class="text-5xl mb-3">📊</div>
+        <p class="text-sm font-bold uppercase tracking-[0.25em] text-emerald-600">Étape 3</p>
+        <h2 class="text-3xl md:text-5xl font-black mt-2">Compter les mouvements</h2>
+        <p class="text-slate-500 mt-4 text-base md:text-lg">
           Clique à chaque mouvement observé pendant l’ascension.
         </p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
         <button onclick="addHand()"
-          class="rounded-3xl bg-orange-500 hover:bg-orange-600 text-white p-8 shadow-lg transition active:scale-95">
-          <div class="text-5xl mb-3">🖐️</div>
-          <div id="handCount" class="text-5xl font-black">0</div>
-          <div class="mt-3 text-2xl font-bold">Mains / Bras</div>
-          <p class="mt-2 text-sm md:text-base opacity-90">Clique à chaque traction ou utilisation importante des bras</p>
+          class="soft-button rounded-[2rem] bg-gradient-to-br from-orange-500 to-orange-600 text-white p-8 shadow-lg">
+          <div class="text-5xl mb-4">🖐️</div>
+          <div id="handCount" class="text-6xl font-black">0</div>
+          <div class="mt-3 text-2xl font-black">Bras / Mains</div>
+          <p class="mt-3 text-sm md:text-base opacity-90">
+            Clique à chaque traction ou forte utilisation des bras
+          </p>
         </button>
 
         <button onclick="addFoot()"
-          class="rounded-3xl bg-emerald-500 hover:bg-emerald-600 text-white p-8 shadow-lg transition active:scale-95">
-          <div class="text-5xl mb-3">🦶</div>
-          <div id="footCount" class="text-5xl font-black">0</div>
-          <div class="mt-3 text-2xl font-bold">Pieds</div>
-          <p class="mt-2 text-sm md:text-base opacity-90">Clique à chaque poussée ou montée de pied</p>
+          class="soft-button rounded-[2rem] bg-gradient-to-br from-emerald-500 to-teal-500 text-white p-8 shadow-lg">
+          <div class="text-5xl mb-4">🦶</div>
+          <div id="footCount" class="text-6xl font-black">0</div>
+          <div class="mt-3 text-2xl font-black">Pieds</div>
+          <p class="mt-3 text-sm md:text-base opacity-90">
+            Clique à chaque poussée ou changement d’appui avec les pieds
+          </p>
         </button>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-6">
         <button onclick="undoLast()"
-          class="bg-slate-200 hover:bg-slate-300 text-slate-800 py-4 rounded-2xl font-bold text-lg">
+          class="soft-button bg-slate-200 hover:bg-slate-300 text-slate-800 py-4 rounded-2xl font-bold text-lg">
           Annuler
         </button>
         <button onclick="resetCount()"
-          class="bg-red-100 hover:bg-red-200 text-red-700 py-4 rounded-2xl font-bold text-lg">
+          class="soft-button bg-red-100 hover:bg-red-200 text-red-700 py-4 rounded-2xl font-bold text-lg">
           Réinitialiser
         </button>
         <button onclick="showResults()"
-          class="bg-slate-900 hover:bg-black text-white py-4 rounded-2xl font-black text-lg">
+          class="soft-button bg-slate-900 hover:bg-black text-white py-4 rounded-2xl font-black text-lg">
           Résultats
         </button>
       </div>
@@ -155,50 +202,64 @@
   </section>
 
   <!-- ECRAN 4 -->
-  <section id="screen4" class="screen min-h-screen pt-24 px-4 items-center justify-center">
-    <div class="w-full max-w-4xl bg-white rounded-3xl shadow-xl border border-slate-200 p-6 md:p-10">
+  <section id="screen4" class="screen min-h-screen pt-32 px-4 items-center justify-center">
+    <div class="w-full max-w-4xl bg-white/95 rounded-[2rem] p-6 md:p-10 border border-white/80 card-glow">
       <div class="text-center mb-8">
-        <p class="text-sm font-bold uppercase tracking-widest text-emerald-600">Étape 4</p>
-        <h2 class="text-3xl md:text-4xl font-black mt-2">Bilan et conseil</h2>
-        <p class="text-slate-500 mt-3">Retour immédiat pour progresser en escalade.</p>
+        <div class="text-5xl mb-3">🏁</div>
+        <p class="text-sm font-bold uppercase tracking-[0.25em] text-emerald-600">Étape 4</p>
+        <h2 class="text-3xl md:text-5xl font-black mt-2">Bilan et conseil</h2>
+        <p class="text-slate-500 mt-4 text-base md:text-lg">
+          Retour immédiat pour aider l’élève à progresser.
+        </p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+        <div class="rounded-3xl bg-slate-50 border border-slate-200 p-5">
           <p class="text-sm text-slate-500 font-bold">Grimpeur</p>
-          <p id="finalClimber" class="text-xl font-black mt-1"></p>
+          <p id="finalClimber" class="text-2xl font-black mt-2"></p>
         </div>
-        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+        <div class="rounded-3xl bg-slate-50 border border-slate-200 p-5">
           <p class="text-sm text-slate-500 font-bold">Observateur</p>
-          <p id="finalObserver" class="text-xl font-black mt-1"></p>
+          <p id="finalObserver" class="text-2xl font-black mt-2"></p>
         </div>
-        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+        <div class="rounded-3xl bg-slate-50 border border-slate-200 p-5">
           <p class="text-sm text-slate-500 font-bold">Voie</p>
-          <p id="finalRoute" class="text-xl font-black mt-1"></p>
+          <p id="finalRoute" class="text-2xl font-black mt-2"></p>
         </div>
       </div>
 
       <div class="grid grid-cols-2 gap-4 mb-6">
-        <div class="bg-orange-50 border border-orange-200 rounded-2xl p-5 text-center">
-          <p class="text-sm text-orange-700 font-bold">Mains / Bras</p>
-          <p id="finalHands" class="text-4xl font-black mt-2 text-orange-600">0</p>
+        <div class="rounded-3xl bg-orange-50 border border-orange-200 p-6 text-center">
+          <p class="text-sm text-orange-700 font-bold">Bras / Mains</p>
+          <p id="finalHands" class="text-5xl font-black mt-2 text-orange-600">0</p>
         </div>
-        <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-5 text-center">
+        <div class="rounded-3xl bg-emerald-50 border border-emerald-200 p-6 text-center">
           <p class="text-sm text-emerald-700 font-bold">Pieds</p>
-          <p id="finalFeet" class="text-4xl font-black mt-2 text-emerald-600">0</p>
+          <p id="finalFeet" class="text-5xl font-black mt-2 text-emerald-600">0</p>
         </div>
       </div>
 
-      <div id="adviceBox" class="rounded-3xl p-6 border text-lg leading-relaxed">
+      <div class="mb-6">
+        <div class="flex justify-between text-sm font-bold text-slate-500 mb-2">
+          <span>Bras</span>
+          <span>Pieds</span>
+        </div>
+        <div class="h-5 bg-slate-200 rounded-full overflow-hidden flex">
+          <div id="barHands" class="bg-orange-500 h-full transition-all duration-500" style="width: 50%;"></div>
+          <div id="barFeet" class="bg-emerald-500 h-full transition-all duration-500" style="width: 50%;"></div>
+        </div>
+      </div>
+
+      <div id="adviceBox" class="rounded-[2rem] p-6 border text-lg leading-relaxed">
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-6">
         <button onclick="goToScreen(3)"
-          class="bg-slate-200 hover:bg-slate-300 text-slate-800 py-4 rounded-2xl font-bold text-lg">
+          class="soft-button bg-slate-200 hover:bg-slate-300 text-slate-800 py-4 rounded-2xl font-bold text-lg">
           Retour au comptage
         </button>
         <button onclick="restartAll()"
-          class="bg-emerald-600 hover:bg-emerald-700 text-white py-4 rounded-2xl font-black text-lg">
+          class="soft-button bg-gradient-to-r from-emerald-600 to-teal-500 hover:opacity-95 text-white py-4 rounded-2xl font-black text-lg">
           Nouveau passage
         </button>
       </div>
@@ -218,6 +279,14 @@
         document.getElementById("dot" + i).className =
           "w-3 h-3 rounded-full " + (i === number ? "bg-emerald-600" : "bg-slate-300");
       }
+
+      const widths = {
+        1: "25%",
+        2: "50%",
+        3: "75%",
+        4: "100%"
+      };
+      document.getElementById("progressBar").style.width = widths[number];
     }
 
     function goToAuthorization() {
@@ -246,13 +315,28 @@
     function addHand() {
       hands++;
       history.push("hand");
-      updateCounters();
+      updateCounters("handCount");
     }
 
     function addFoot() {
       feet++;
       history.push("foot");
-      updateCounters();
+      updateCounters("footCount");
+    }
+
+    function updateCounters(animatedId = null) {
+      const handEl = document.getElementById("handCount");
+      const footEl = document.getElementById("footCount");
+
+      handEl.textContent = hands;
+      footEl.textContent = feet;
+
+      if (animatedId) {
+        const el = document.getElementById(animatedId);
+        el.classList.remove("count-pop");
+        void el.offsetWidth;
+        el.classList.add("count-pop");
+      }
     }
 
     function undoLast() {
@@ -270,11 +354,6 @@
       updateCounters();
     }
 
-    function updateCounters() {
-      document.getElementById("handCount").textContent = hands;
-      document.getElementById("footCount").textContent = feet;
-    }
-
     function showResults() {
       document.getElementById("finalClimber").textContent = document.getElementById("climberName").value.trim();
       document.getElementById("finalObserver").textContent = document.getElementById("observerName").value.trim();
@@ -282,24 +361,31 @@
       document.getElementById("finalHands").textContent = hands;
       document.getElementById("finalFeet").textContent = feet;
 
+      const total = hands + feet;
+      const handPercent = total === 0 ? 50 : (hands / total) * 100;
+      const footPercent = total === 0 ? 50 : (feet / total) * 100;
+
+      document.getElementById("barHands").style.width = handPercent + "%";
+      document.getElementById("barFeet").style.width = footPercent + "%";
+
       const box = document.getElementById("adviceBox");
 
       if (feet > hands) {
-        box.className = "rounded-3xl p-6 border text-lg leading-relaxed bg-emerald-50 border-emerald-300 text-emerald-900";
+        box.className = "rounded-[2rem] p-6 border text-lg leading-relaxed bg-emerald-50 border-emerald-300 text-emerald-900";
         box.innerHTML = `
           <p class="text-2xl font-black mb-3">🟢 Super !</p>
           <p>Tu utilises bien tes pieds 👍</p>
           <p class="mt-2 font-semibold">➡️ Tu peux essayer une voie un peu plus difficile !</p>
         `;
       } else if (feet === hands) {
-        box.className = "rounded-3xl p-6 border text-lg leading-relaxed bg-yellow-50 border-yellow-300 text-yellow-900";
+        box.className = "rounded-[2rem] p-6 border text-lg leading-relaxed bg-yellow-50 border-yellow-300 text-yellow-900";
         box.innerHTML = `
           <p class="text-2xl font-black mb-3">🟡 Pas mal du tout !</p>
           <p>Tu peux encore t’améliorer : pense à utiliser davantage tes pieds.</p>
           <p class="mt-2">➡️ Allez, recommence pour faire encore mieux !</p>
         `;
       } else {
-        box.className = "rounded-3xl p-6 border text-lg leading-relaxed bg-red-50 border-red-300 text-red-900";
+        box.className = "rounded-[2rem] p-6 border text-lg leading-relaxed bg-red-50 border-red-300 text-red-900";
         box.innerHTML = `
           <p class="text-2xl font-black mb-3">🔴 Attention !</p>
           <p>Tu tires trop sur les bras 😬</p>
@@ -317,10 +403,17 @@
       document.getElementById("observerName").value = "";
       document.getElementById("routeLevel").value = "";
       document.getElementById("setupError").classList.add("hidden");
+
       hands = 0;
       feet = 0;
       history = [];
       updateCounters();
+
+      document.getElementById("finalHands").textContent = "0";
+      document.getElementById("finalFeet").textContent = "0";
+      document.getElementById("barHands").style.width = "50%";
+      document.getElementById("barFeet").style.width = "50%";
+
       goToScreen(1);
     }
 
