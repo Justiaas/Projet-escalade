@@ -5,156 +5,326 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Escalade Coach</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: Arial, sans-serif; }
+    .screen { display: none; }
+    .screen.active { display: flex; }
+  </style>
 </head>
+<body class="bg-gradient-to-b from-emerald-50 to-slate-100 text-slate-900">
 
-<body class="bg-slate-50 text-slate-900 min-h-screen">
-
-<header class="bg-emerald-700 text-white p-4">
-  <h1 class="text-2xl font-bold">Escalade Coach</h1>
-  <p class="text-sm">Utiliser plus les pieds que les bras</p>
-</header>
-
-<main class="p-4 space-y-6 max-w-3xl mx-auto">
-
-<!-- Infos -->
-<section class="bg-white p-4 rounded-xl shadow">
-  <h2 class="font-bold mb-3">Préparation</h2>
-
-  <input id="climber" placeholder="Nom du grimpeur"
-    class="w-full border p-2 rounded mb-2">
-
-  <input id="observer" placeholder="Nom de l'observateur"
-    class="w-full border p-2 rounded mb-2">
-
-  <select id="voie" class="w-full border p-2 rounded">
-    <option value="">Choisir une voie</option>
-    <option>4a</option>
-    <option>4b</option>
-    <option>4c</option>
-    <option>5a</option>
-    <option>5b</option>
-    <option>5c</option>
-  </select>
-
-  <div class="mt-3 space-y-2">
-    <button onclick="autorisation()" class="bg-indigo-500 text-white w-full py-2 rounded">
-      Autorisation
-    </button>
-
-    <button onclick="start()" class="bg-green-600 text-white w-full py-2 rounded">
-      Départ autorisé
-    </button>
+  <!-- Barre de progression -->
+  <div class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur border-b border-slate-200">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+      <div>
+        <h1 class="text-xl md:text-2xl font-black text-emerald-700">Escalade Coach</h1>
+        <p class="text-xs md:text-sm text-slate-500">Utiliser davantage les pieds que les bras</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <div id="dot1" class="w-3 h-3 rounded-full bg-emerald-600"></div>
+        <div id="dot2" class="w-3 h-3 rounded-full bg-slate-300"></div>
+        <div id="dot3" class="w-3 h-3 rounded-full bg-slate-300"></div>
+        <div id="dot4" class="w-3 h-3 rounded-full bg-slate-300"></div>
+      </div>
+    </div>
   </div>
 
-  <div id="status" class="mt-3 text-orange-600 font-bold">
-    En attente
-  </div>
-</section>
+  <!-- ECRAN 1 -->
+  <section id="screen1" class="screen active min-h-screen pt-24 px-4 items-center justify-center">
+    <div class="w-full max-w-3xl bg-white rounded-3xl shadow-xl border border-slate-200 p-6 md:p-10">
+      <div class="text-center mb-8">
+        <p class="text-sm font-bold uppercase tracking-widest text-emerald-600">Étape 1</p>
+        <h2 class="text-3xl md:text-4xl font-black mt-2">Préparer le passage</h2>
+        <p class="text-slate-500 mt-3">Renseigne les informations avant de commencer l’observation.</p>
+      </div>
 
-<!-- Compteur -->
-<section id="zone" class="bg-white p-4 rounded-xl shadow opacity-50 pointer-events-none">
+      <div class="space-y-5">
+        <div>
+          <label class="block text-sm font-bold mb-2">Nom du grimpeur</label>
+          <input id="climberName" type="text" placeholder="Ex : Lina Martin"
+            class="w-full rounded-2xl border border-slate-300 px-4 py-4 text-lg focus:outline-none focus:ring-4 focus:ring-emerald-200" />
+        </div>
 
-  <h2 class="font-bold mb-3">Compteur</h2>
+        <div>
+          <label class="block text-sm font-bold mb-2">Nom de l’observateur</label>
+          <input id="observerName" type="text" placeholder="Ex : Adam Bernard"
+            class="w-full rounded-2xl border border-slate-300 px-4 py-4 text-lg focus:outline-none focus:ring-4 focus:ring-emerald-200" />
+        </div>
 
-  <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-bold mb-2">Voie choisie</label>
+          <select id="routeLevel"
+            class="w-full rounded-2xl border border-slate-300 px-4 py-4 text-lg focus:outline-none focus:ring-4 focus:ring-emerald-200">
+            <option value="">-- Sélectionner une voie --</option>
+            <option value="4a">4a</option>
+            <option value="4b">4b</option>
+            <option value="4c">4c</option>
+            <option value="5a">5a</option>
+            <option value="5b">5b</option>
+            <option value="5c">5c</option>
+          </select>
+        </div>
+      </div>
 
-    <button onclick="bras()" class="bg-orange-500 text-white p-4 rounded">
-      <div id="b">0</div>
-      Bras
-    </button>
+      <div id="setupError" class="mt-5 text-red-600 font-semibold hidden">
+        Merci de remplir toutes les informations.
+      </div>
 
-    <button onclick="pieds()" class="bg-green-500 text-white p-4 rounded">
-      <div id="p">0</div>
-      Pieds
-    </button>
+      <button onclick="goToAuthorization()"
+        class="mt-8 w-full bg-emerald-600 hover:bg-emerald-700 text-white py-4 rounded-2xl text-lg md:text-xl font-black shadow-lg transition">
+        Continuer
+      </button>
+    </div>
+  </section>
 
-  </div>
+  <!-- ECRAN 2 -->
+  <section id="screen2" class="screen min-h-screen pt-24 px-4 items-center justify-center">
+    <div class="w-full max-w-3xl bg-white rounded-3xl shadow-xl border border-slate-200 p-6 md:p-10 text-center">
+      <p class="text-sm font-bold uppercase tracking-widest text-red-500">Étape 2</p>
+      <h2 class="text-3xl md:text-4xl font-black mt-2">Attendre le professeur</h2>
+      <p class="text-slate-600 mt-4 text-lg">
+        Le grimpeur ne doit pas commencer avant l’autorisation du professeur.
+      </p>
 
-  <button onclick="analyse()" class="mt-3 bg-black text-white w-full py-2 rounded">
-    Analyser
-  </button>
+      <div class="mt-8 bg-amber-50 border border-amber-300 rounded-2xl p-5 text-amber-800">
+        <p class="font-bold text-lg">Consigne de sécurité</p>
+        <p class="mt-2">
+          Grimpeur : <span id="recapClimber" class="font-bold"></span><br>
+          Observateur : <span id="recapObserver" class="font-bold"></span><br>
+          Voie : <span id="recapRoute" class="font-bold"></span>
+        </p>
+        <p class="mt-3 font-semibold">Attendre le professeur avant de lancer le passage.</p>
+      </div>
 
-  <button onclick="reset()" class="mt-2 bg-red-300 w-full py-2 rounded">
-    Reset
-  </button>
+      <button onclick="authorizeStart()"
+        class="mt-8 w-full bg-red-600 hover:bg-red-700 text-white py-5 rounded-2xl text-xl md:text-2xl font-black shadow-lg transition">
+        Autoriser le départ
+      </button>
 
-</section>
+      <button onclick="goToScreen(1)"
+        class="mt-4 w-full bg-slate-200 hover:bg-slate-300 text-slate-800 py-3 rounded-2xl text-base font-bold transition">
+        Retour
+      </button>
+    </div>
+  </section>
 
-<!-- Résultat -->
-<section class="bg-white p-4 rounded-xl shadow">
-  <h2 class="font-bold mb-3">Résultat</h2>
-  <div id="result">...</div>
-</section>
+  <!-- ECRAN 3 -->
+  <section id="screen3" class="screen min-h-screen pt-24 px-4 items-center justify-center">
+    <div class="w-full max-w-4xl bg-white rounded-3xl shadow-xl border border-slate-200 p-6 md:p-10">
+      <div class="text-center mb-8">
+        <p class="text-sm font-bold uppercase tracking-widest text-emerald-600">Étape 3</p>
+        <h2 class="text-3xl md:text-4xl font-black mt-2">Compter les mouvements</h2>
+        <p class="text-slate-500 mt-3">
+          Clique à chaque mouvement observé pendant l’ascension.
+        </p>
+      </div>
 
-</main>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <button onclick="addHand()"
+          class="rounded-3xl bg-orange-500 hover:bg-orange-600 text-white p-8 shadow-lg transition active:scale-95">
+          <div class="text-5xl mb-3">🖐️</div>
+          <div id="handCount" class="text-5xl font-black">0</div>
+          <div class="mt-3 text-2xl font-bold">Mains / Bras</div>
+          <p class="mt-2 text-sm md:text-base opacity-90">Clique à chaque traction ou utilisation importante des bras</p>
+        </button>
 
-<script>
-let b = 0;
-let p = 0;
-let ok = false;
+        <button onclick="addFoot()"
+          class="rounded-3xl bg-emerald-500 hover:bg-emerald-600 text-white p-8 shadow-lg transition active:scale-95">
+          <div class="text-5xl mb-3">🦶</div>
+          <div id="footCount" class="text-5xl font-black">0</div>
+          <div class="mt-3 text-2xl font-bold">Pieds</div>
+          <p class="mt-2 text-sm md:text-base opacity-90">Clique à chaque poussée ou montée de pied</p>
+        </button>
+      </div>
 
-function bras(){
-  if(!ok) return;
-  b++;
-  document.getElementById("b").innerText = b;
-}
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 mt-6">
+        <button onclick="undoLast()"
+          class="bg-slate-200 hover:bg-slate-300 text-slate-800 py-4 rounded-2xl font-bold text-lg">
+          Annuler
+        </button>
+        <button onclick="resetCount()"
+          class="bg-red-100 hover:bg-red-200 text-red-700 py-4 rounded-2xl font-bold text-lg">
+          Réinitialiser
+        </button>
+        <button onclick="showResults()"
+          class="bg-slate-900 hover:bg-black text-white py-4 rounded-2xl font-black text-lg">
+          Résultats
+        </button>
+      </div>
+    </div>
+  </section>
 
-function pieds(){
-  if(!ok) return;
-  p++;
-  document.getElementById("p").innerText = p;
-}
+  <!-- ECRAN 4 -->
+  <section id="screen4" class="screen min-h-screen pt-24 px-4 items-center justify-center">
+    <div class="w-full max-w-4xl bg-white rounded-3xl shadow-xl border border-slate-200 p-6 md:p-10">
+      <div class="text-center mb-8">
+        <p class="text-sm font-bold uppercase tracking-widest text-emerald-600">Étape 4</p>
+        <h2 class="text-3xl md:text-4xl font-black mt-2">Bilan et conseil</h2>
+        <p class="text-slate-500 mt-3">Retour immédiat pour progresser en escalade.</p>
+      </div>
 
-function autorisation(){
-  let c = climber.value;
-  let o = observer.value;
-  let v = voie.value;
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+          <p class="text-sm text-slate-500 font-bold">Grimpeur</p>
+          <p id="finalClimber" class="text-xl font-black mt-1"></p>
+        </div>
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+          <p class="text-sm text-slate-500 font-bold">Observateur</p>
+          <p id="finalObserver" class="text-xl font-black mt-1"></p>
+        </div>
+        <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4">
+          <p class="text-sm text-slate-500 font-bold">Voie</p>
+          <p id="finalRoute" class="text-xl font-black mt-1"></p>
+        </div>
+      </div>
 
-  if(!c || !o || !v){
-    status.innerText = "Remplir toutes les infos";
-    return;
-  }
+      <div class="grid grid-cols-2 gap-4 mb-6">
+        <div class="bg-orange-50 border border-orange-200 rounded-2xl p-5 text-center">
+          <p class="text-sm text-orange-700 font-bold">Mains / Bras</p>
+          <p id="finalHands" class="text-4xl font-black mt-2 text-orange-600">0</p>
+        </div>
+        <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-5 text-center">
+          <p class="text-sm text-emerald-700 font-bold">Pieds</p>
+          <p id="finalFeet" class="text-4xl font-black mt-2 text-emerald-600">0</p>
+        </div>
+      </div>
 
-  status.innerText = "Attendre le prof...";
-}
+      <div id="adviceBox" class="rounded-3xl p-6 border text-lg leading-relaxed">
+      </div>
 
-function start(){
-  ok = true;
-  zone.classList.remove("opacity-50","pointer-events-none");
-  status.innerText = "GO !";
-}
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-6">
+        <button onclick="goToScreen(3)"
+          class="bg-slate-200 hover:bg-slate-300 text-slate-800 py-4 rounded-2xl font-bold text-lg">
+          Retour au comptage
+        </button>
+        <button onclick="restartAll()"
+          class="bg-emerald-600 hover:bg-emerald-700 text-white py-4 rounded-2xl font-black text-lg">
+          Nouveau passage
+        </button>
+      </div>
+    </div>
+  </section>
 
-function analyse(){
-  let msg = "";
+  <script>
+    let hands = 0;
+    let feet = 0;
+    let history = [];
 
-  if(p > b){
-    msg = "💪 Très bien ! Tu utilises bien tes jambes ! Tu peux passer à une voie plus dure !";
-  }
-  else if(p == b){
-    msg = "👍 Pas mal ! mais tu peux faire mieux... recommence !";
-  }
-  else{
-    msg = "😅 Aïe aïe aïe... ça tire dans les bras ! utilise plus tes jambes !";
-  }
+    function goToScreen(number) {
+      document.querySelectorAll(".screen").forEach(screen => screen.classList.remove("active"));
+      document.getElementById("screen" + number).classList.add("active");
 
-  result.innerHTML = `
-    Bras : ${b}<br>
-    Pieds : ${p}<br><br>
-    ${msg}
-  `;
-}
+      for (let i = 1; i <= 4; i++) {
+        document.getElementById("dot" + i).className =
+          "w-3 h-3 rounded-full " + (i === number ? "bg-emerald-600" : "bg-slate-300");
+      }
+    }
 
-function reset(){
-  b = 0;
-  p = 0;
-  ok = false;
-  document.getElementById("b").innerText = 0;
-  document.getElementById("p").innerText = 0;
-  result.innerText = "...";
-  status.innerText = "En attente";
-  zone.classList.add("opacity-50","pointer-events-none");
-}
-</script>
+    function goToAuthorization() {
+      const climber = document.getElementById("climberName").value.trim();
+      const observer = document.getElementById("observerName").value.trim();
+      const route = document.getElementById("routeLevel").value;
+      const error = document.getElementById("setupError");
 
+      if (!climber || !observer || !route) {
+        error.classList.remove("hidden");
+        return;
+      }
+
+      error.classList.add("hidden");
+      document.getElementById("recapClimber").textContent = climber;
+      document.getElementById("recapObserver").textContent = observer;
+      document.getElementById("recapRoute").textContent = route;
+
+      goToScreen(2);
+    }
+
+    function authorizeStart() {
+      goToScreen(3);
+    }
+
+    function addHand() {
+      hands++;
+      history.push("hand");
+      updateCounters();
+    }
+
+    function addFoot() {
+      feet++;
+      history.push("foot");
+      updateCounters();
+    }
+
+    function undoLast() {
+      if (history.length === 0) return;
+      const last = history.pop();
+      if (last === "hand" && hands > 0) hands--;
+      if (last === "foot" && feet > 0) feet--;
+      updateCounters();
+    }
+
+    function resetCount() {
+      hands = 0;
+      feet = 0;
+      history = [];
+      updateCounters();
+    }
+
+    function updateCounters() {
+      document.getElementById("handCount").textContent = hands;
+      document.getElementById("footCount").textContent = feet;
+    }
+
+    function showResults() {
+      document.getElementById("finalClimber").textContent = document.getElementById("climberName").value.trim();
+      document.getElementById("finalObserver").textContent = document.getElementById("observerName").value.trim();
+      document.getElementById("finalRoute").textContent = document.getElementById("routeLevel").value;
+      document.getElementById("finalHands").textContent = hands;
+      document.getElementById("finalFeet").textContent = feet;
+
+      const box = document.getElementById("adviceBox");
+
+      if (feet > hands) {
+        box.className = "rounded-3xl p-6 border text-lg leading-relaxed bg-emerald-50 border-emerald-300 text-emerald-900";
+        box.innerHTML = `
+          <p class="text-2xl font-black mb-3">🟢 Super !</p>
+          <p>Tu utilises bien tes pieds 👍</p>
+          <p class="mt-2 font-semibold">➡️ Tu peux essayer une voie un peu plus difficile !</p>
+        `;
+      } else if (feet === hands) {
+        box.className = "rounded-3xl p-6 border text-lg leading-relaxed bg-yellow-50 border-yellow-300 text-yellow-900";
+        box.innerHTML = `
+          <p class="text-2xl font-black mb-3">🟡 Pas mal du tout !</p>
+          <p>Tu peux encore t’améliorer : pense à utiliser davantage tes pieds.</p>
+          <p class="mt-2">➡️ Allez, recommence pour faire encore mieux !</p>
+        `;
+      } else {
+        box.className = "rounded-3xl p-6 border text-lg leading-relaxed bg-red-50 border-red-300 text-red-900";
+        box.innerHTML = `
+          <p class="text-2xl font-black mb-3">🔴 Attention !</p>
+          <p>Tu tires trop sur les bras 😬</p>
+          <p class="mt-2">➡️ En escalade, ce sont surtout les pieds qui travaillent.</p>
+          <p>➡️ Essaie de pousser avec tes jambes et de moins tirer avec les bras.</p>
+          <p class="mt-2 font-semibold">➡️ Recommence, tu vas y arriver 💪</p>
+        `;
+      }
+
+      goToScreen(4);
+    }
+
+    function restartAll() {
+      document.getElementById("climberName").value = "";
+      document.getElementById("observerName").value = "";
+      document.getElementById("routeLevel").value = "";
+      document.getElementById("setupError").classList.add("hidden");
+      hands = 0;
+      feet = 0;
+      history = [];
+      updateCounters();
+      goToScreen(1);
+    }
+
+    updateCounters();
+  </script>
 </body>
 </html>
